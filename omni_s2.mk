@@ -14,22 +14,11 @@
 # limitations under the License.
 #
 
-# Specify phone tech before including full_phone
-$(call inherit-product, vendor/omni/config/gsm.mk)
-
-# Inherit some common Omni stuff.
-$(call inherit-product, vendor/omni/config/common.mk)
-
-# Inherit Telephony packages
+# Product common configurations
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+$(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
 
-PRODUCT_PACKAGES += \
-	charger_res_images \
-	charger
-
-# Time Zone data for recovery
-PRODUCT_COPY_FILES += \
-    bionic/libc/zoneinfo/tzdata:recovery/root/system/usr/share/zoneinfo/tzdata
 
 # Device identifier. This must come after all inclusions
 PRODUCT_NAME := omni_s2
@@ -37,3 +26,10 @@ PRODUCT_DEVICE := s2
 PRODUCT_BRAND := LeEco
 PRODUCT_MANUFACTURER := LeMobile
 PRODUCT_MODEL := LeEco Le 2
+
+PRODUCT_BUILD_PROP_OVERRIDES += \
+    TARGET_DEVICE=le_s2 \
+    PRODUCT_NAME=Le2_CN \
+    PRIVATE_BUILD_DESC="s2-user 6.0.1 IIXOSOP5801910121S 44 release-keys"
+
+BUILD_FINGERPRINT := Letv/Le2_WW/le_s2_ww:6.0.1/IIXOSOP5801910121S/44:user/release-keys

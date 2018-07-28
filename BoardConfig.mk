@@ -32,14 +32,15 @@ TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := generic
+TARGET_CPU_VARIANT := cortex-a53
 
 TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv7-a-neon
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
-TARGET_2ND_CPU_VARIANT := cortex-a53
+TARGET_2ND_CPU_VARIANT := cortex-a53.a57
 
+TARGET_CPU_CORTEX_A53 := true
 TARGET_USES_64_BIT_BINDER := true
 
 # Kernel
@@ -47,8 +48,8 @@ TARGET_KERNEL_SOURCE := kernel/leeco/msm8976
 TARGET_KERNEL_CONFIG := lineage_s2_defconfig
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
+TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
-TARGET_KERNEL_APPEND_DTB := true
 
 # Boot Image
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 earlyprintk androidboot.selinux=permissive
@@ -69,25 +70,32 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 57033579520 # (55696871×1024) - 16384
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 
 # Full disk encryption
+TW_INCLUDE_CRYPTO := true
 TARGET_HW_DISK_ENCRYPTION := true
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
-# Recovery
+# Partition Format
+TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/recovery/root/etc/twrp.fstab
+
+# File systems
+BOARD_HAS_LARGE_FILESYSTEM := true
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
-RECOVERY_VARIANT := twrp
+# TWRP specific build flags
 TW_THEME := portrait_hdpi
-BOARD_HAS_NO_REAL_SDCARD := true
 RECOVERY_SDCARD_ON_DATA := true
+TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 TARGET_RECOVERY_QCOM_RTC_FIX := true
-TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
-TW_DEFAULT_BRIGHTNESS := "160"
-TW_INPUT_BLACKLIST := "hbtp_vm"
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun0/file
-TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/recovery/root/etc/twrp.fstab
-TW_EXTRA_LANGUAGES := true
-TW_INCLUDE_CRYPTO := true
-TARGET_RECOVERY_DEVICE_MODULES := libbinder libgui libui libEGL libGLESv2 libprotobuf-cpp-lite libsync
-TW_RECOVERY_ADDITIONAL_RELINK_FILES := $(OUT)/system/lib64/libbinder.so $(OUT)/system/lib64/libgui.so $(OUT)/system/lib64/libui.so $(OUT)/system/lib64/libEGL.so $(OUT)/system/lib64/libGLESv2.so $(OUT)/system/lib64/libprotobuf-cpp-lite.so $(OUT)/system/lib64/libsync.so
+TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
+TW_DEFAULT_BRIGHTNESS := 70
+TW_DEFAULT_EXTERNAL_STORAGE := true
+TW_EXCLUDE_SUPERSU := true
 TW_INCLUDE_NTFS_3G := true
+TW_INPUT_BLACKLIST := "hbtp_vm"
+TW_IGNORE_MISC_WIPE_DATA := true
+BOARD_HAS_NO_REAL_SDCARD := true
+
+# Asian region languages
+TW_EXTRA_LANGUAGES := true
